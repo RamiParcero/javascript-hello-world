@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  pAWSId:
+    Type: String
+    Description: Id de la cuenta de AWS donde se desplegara el Lambda.
+
+
+Resources:
+  
+  LambdaVacio:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: Hello-World-Lambda  #Nombre que va a tener el Lambda en AWS.
+      Handler: index.handler #Busca un archivo llamda index.js y ejecuta la funcion handler.
+      Runtime: nodejs20.x #Entorno de ejecucion de la lambda (Ultima version de Node.js)
+      Role: !Sub arn:aws:iam::${pAWSId}:role/LambdaExecutionRole # Se solicita el ARN con premisos para ejecutar el Lambda.
+      Code:  #Define el codigo que va a ejecutar la funcion Lambda.
+        ZipFile: |
+          exports.handler = async (event) => {};
+
