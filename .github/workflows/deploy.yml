@@ -23,14 +23,16 @@ jobs: #Se pueden tener varios jobs.
       - name: Codigo del proyecto #Este zip es lo que se va a subir al lambda.
         run: zip -r function.zip . -x "*.git*" "cloudformation/*" ".github/*"
 
-      - name: Despliegue a AWS Lambda
+      - name: Configura credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-          inline-script: |
-            aws lambda update-function-code \
-              --function-name Hello-World-Lambda \
-              --zip-file fileb://function.zip
+
+      - name: Despliegue a AWS Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name Hello-World-Lambda \
+            --zip-file fileb://function.zip
 
