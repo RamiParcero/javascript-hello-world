@@ -1,0 +1,36 @@
+name: Desplegar en Lambda #Nombre de workflow, asi aparece cuando se ejecuta GitHub Actions.
+
+on: #El workflow se activa cuando se hace un git push a la rama main.
+  push:
+    branches:
+      - main
+
+jobs: #Se pueden tener varios jobs.
+  deploy:
+    runs-on: ubuntu-latest #GitHub crea una VM para ejecutar el workflow.
+    steps: #Dentro del job "deploy" definimos los pasos que GitHub tiene que seguir:
+      - name: Checkout #Descarga el codigo del repo a la VM
+        uses: actions/checkout@v3
+      
+      - name: Instala Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      
+      - name: Instala dependencias
+        run: npm install
+      
+      - name: Codigo del proyecto #Este zip es lo que se va a subir al lambda.
+        run: zip -r function.zip . -x "*.git*" "cloudformation/*" ".github/*"
+
+      - name: Despliegue a AWS Lambda
+        uses: aws-actions/aws-cli-action@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          inline-script: |
+            aws lambda update-function-code \
+              --function-name Hello-World-Lambda \
+              --zip-file fileb://function.zip
+
