@@ -20,8 +20,11 @@ jobs: #Se pueden tener varios jobs.
       - name: Instala dependencias
         run: npm install
       
-      - name: Codigo del proyecto #Este zip es lo que se va a subir al lambda.
-        run: zip -r function.zip . -x "*.git*" "cloudformation/*" ".github/*"
+      - name: Copia el codigo desde src
+        run: cp -r src/* .
+
+      - name: Empaqueta el codigo
+        run: zip function.zip index.js
 
       - name: Configura credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v2
