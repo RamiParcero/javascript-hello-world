@@ -21,7 +21,7 @@ jobs: #Se pueden tener varios jobs.
         run: npm install
       
       - name: Copia el codigo desde src
-        run: cp -r src/* .
+        run: cp src/index.js .
 
       - name: Empaqueta el codigo
         run: zip function.zip index.js
