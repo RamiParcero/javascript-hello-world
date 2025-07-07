@@ -20,11 +20,11 @@ jobs: #Se pueden tener varios jobs.
       - name: Instala dependencias
         run: npm install
       
-      - name: Copia el codigo desde src
-        run: cp src/index.js .
+      - name: Copia index.js y app.js a la raíz
+        run: cp src/index.js src/app.js .
 
       - name: Empaqueta el codigo
-        run: zip function.zip index.js
+        run: zip -r function.zip index.js app.js package.json node_modules/
 
       - name: Configura credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v2
@@ -33,7 +33,7 @@ jobs: #Se pueden tener varios jobs.
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Despliegue a AWS Lambda
+      - name: Despliegue a AWS Lambda 
         run: |
           aws lambda update-function-code \
             --function-name Hello-World-Lambda \
