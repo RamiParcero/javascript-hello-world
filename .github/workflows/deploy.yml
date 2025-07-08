@@ -26,6 +26,19 @@ jobs: #Se pueden tener varios jobs.
       - name: Empaqueta el codigo
         run: zip -r function.zip index.js app.js package.json node_modules/
 
+      - name: Aprobacion manual
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: RamiParcero
+          minimum-approvals: 1
+          issue-title: "Aprobacion para desplegar el Lambda"
+          issue-body: "Porfavor, aceptá o negá este despliegue"
+          exclude-branches: ""
+          fail-on-denail: true
+          additional-approved-words: 'dale, ok'
+          additional-denied-words: 'denegado, negativo'
+
       - name: Configura credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
