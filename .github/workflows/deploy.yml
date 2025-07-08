@@ -35,7 +35,7 @@ jobs: #Se pueden tener varios jobs.
           issue-title: "Aprobacion para desplegar el Lambda"
           issue-body: "Porfavor, aceptá o negá este despliegue"
           exclude-branches: ""
-          fail-on-denail: true
+          fail-on-denial: true
           additional-approved-words: 'dale, ok'
           additional-denied-words: 'denegado, negativo'
 
