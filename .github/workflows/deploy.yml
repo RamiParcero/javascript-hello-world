@@ -12,7 +12,7 @@ jobs: #Se pueden tener varios jobs.
       with:
         approvers: RamiParcero
       secrets:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     runs-on: ubuntu-latest #GitHub crea una VM para ejecutar el workflow.

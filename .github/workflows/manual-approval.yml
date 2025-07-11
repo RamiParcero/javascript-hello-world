@@ -7,7 +7,7 @@ on:
         required: true
         type: string
     secrets:
-      GITHUB_TOKEN:
+      GH_TOKEN:
         required: true
           
 
@@ -18,7 +18,7 @@ jobs:
       - name: Esperar aprobacion manual
         uses: trstringer/manual-approval@v1
         with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
+          secret: ${{ secrets.GH_TOKEN }}
           approvers: ${{ inputs.approvers }}
           minimum-approvals: 1
           issue-title: "Aprobacion para desplegar el Lambda"
