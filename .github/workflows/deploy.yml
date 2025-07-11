@@ -6,6 +6,14 @@ on: #El workflow se activa cuando se hace un git push a la rama main.
       - main
 
 jobs: #Se pueden tener varios jobs.
+
+  approval:
+      uses: ./.github/workflows/manual-approval.yml
+      with:
+        approvers: RamiParcero
+      secrets:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   deploy:
     runs-on: ubuntu-latest #GitHub crea una VM para ejecutar el workflow.
     steps: #Dentro del job "deploy" definimos los pasos que GitHub tiene que seguir:
@@ -25,19 +33,6 @@ jobs: #Se pueden tener varios jobs.
 
       - name: Empaqueta el codigo
         run: zip -r function.zip index.js app.js package.json node_modules/
-
-      - name: Aprobacion manual
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: RamiParcero
-          minimum-approvals: 1
-          issue-title: "Aprobacion para desplegar el Lambda"
-          issue-body: "Porfavor, aceptá o negá este despliegue"
-          exclude-workflow-initiator-as-approver: false
-          fail-on-denial: true
-          additional-approved-words: 'dale, ok'
-          additional-denied-words: 'denegado, negativo'
 
       - name: Configura credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v2

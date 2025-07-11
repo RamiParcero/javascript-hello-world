@@ -1,0 +1,29 @@
+name: Manual Approval (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      approvers:
+        required: true
+        type: string
+      secrets:
+        GITHUB_TOKEN:
+          required: true
+
+jobs:
+  aprobacion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Esperar aprobacion manual
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: ${{ inputs.approvers }}
+          minimum-approvals: 1
+          issue-title: "Aprobacion para desplegar el Lambda"
+          issue-body: "Porfavor, aceptá o negá este despliegue"
+          exclude-workflow-initiator-as-approver: false
+          fail-on-denial: true
+          additional-approved-words: 'dale, ok'
+          additional-denied-words: 'denegado, negativo'
+
