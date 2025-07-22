@@ -21,7 +21,7 @@ jobs: #Se pueden tener varios jobs.
           node-version: 20
 
       - name: Instala dependencias
-        run: npm ci
+        run: npm install
 
       - name: Empaqueta el Lambda
         run: |
