@@ -55,7 +55,7 @@ jobs: #Se pueden tener varios jobs.
       - name: Descarga el artifact
         uses: actions/download-artifact@v4
         with: 
-          name: lambda.zip
+          name: lambda-zip
 
       - name: Configura credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v2
