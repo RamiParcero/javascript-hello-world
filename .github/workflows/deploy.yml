@@ -7,10 +7,17 @@ on: #El workflow se activa cuando se hace un git push a la rama main.
 
 jobs: #Se pueden tener varios jobs.
 
+  approval: #llama al otro workflow que contiene el manual approval.
+      uses: ./.github/workflows/manual-approval.yml
+      with:
+        approvers: RamiParcero
+      secrets:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+
   build:
     name: Construye el Lambda.Zip 
     runs-on: ubuntu-latest #GitHub crea una VM para ejecutar el workflow.
-
+    needs: approval
     steps: #Dentro del job "deploy" definimos los pasos que GitHub tiene que seguir:
       - name: Checkout #Descarga el codigo del repo a la VM
         uses: actions/checkout@v3
@@ -40,17 +47,10 @@ jobs: #Se pueden tener varios jobs.
           name: lambda-zip
           path: lambda.zip
 
-  approval: #llama al otro workflow que contiene el manual approval.
-      uses: ./.github/workflows/manual-approval.yml
-      with:
-        approvers: RamiParcero
-      secrets:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   deploy:
     name: Despliega el AWS Lambda
     runs-on: ubuntu-latest 
-    needs: approval
+    needs: build
     steps: 
       - name: Descarga el artifact
         uses: actions/download-artifact@v4
